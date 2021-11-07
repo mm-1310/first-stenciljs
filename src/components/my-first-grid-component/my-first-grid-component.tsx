@@ -1,4 +1,4 @@
-import { Component, h, State } from '@stencil/core';
+import { Component, h, State, Prop } from '@stencil/core';
 
 import { Md5 } from 'ts-md5/dist/md5'
 
@@ -9,21 +9,20 @@ import { Md5 } from 'ts-md5/dist/md5'
 })
 
 export class MyFirstGridComponent {
-    @State() url: string = 'https://gateway.marvel.com:443/v1/public/comics'
+    @Prop() url: string
+    @Prop() apikey: string
+    @Prop() privatekey: string
+
     @State() data: any
 
-    async componentWillRender() {
-        // let comicsList = []
+    async componentWillLoad() {
         //DATA FOR HASH
-        let publicKey = '89dd9f6152897008a59e0050cecf5713'
-        let privateKey = 'e3e2db831d87d93f01ede25bfdc6bd0d46ac9fa6'
         let timeStamp = Date.now()
-
-        let hash = Md5.hashStr(timeStamp + privateKey + publicKey)
+        let hash = Md5.hashStr(timeStamp + this.privatekey + this.apikey)
         //END HASH
 
         try {
-            const res = await fetch(this.url + `?limit=20&offset=10&ts=${timeStamp}&apikey=${publicKey}&hash=${hash}`)
+            const res = await fetch(this.url + `?limit=20&offset=10&ts=${timeStamp}&apikey=${this.apikey}&hash=${hash}`)
             const data = await res.json()
 
             this.handleErrors(res)
@@ -44,17 +43,19 @@ export class MyFirstGridComponent {
         let comicsList = this.data.data.results
 
         return (
-            <div class="container">
+            <ion-list class="container">
                 {comicsList.map((comic: any, i: number) => {
                     return(
-                        <div class="comics" key={i}>
-                            <p>ID: {comic.id}</p>
-                            <p>Title: {comic.title}</p>
-                            <p>Format: {comic.format}</p>
-                        </div>
+                        <ion-item class="comics" key={i}>
+                            <ion-label>
+                                <p>ID: {comic.id}</p>
+                                <p>Title: {comic.title}</p>
+                                <p>Format: {comic.format}</p>
+                            </ion-label>
+                        </ion-item>
                     )
                 })}
-            </div>
+            </ion-list>
         )
     }
 

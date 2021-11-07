@@ -3,17 +3,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .comics {
-    margin: 20px;
-    width: calc(100% - 40px);
+    margin: 20px 0;
+    width: calc(100% - 30px);
 
     padding: 10px 15px;
     box-sizing: border-box;
-    transition: all .5s;
+    transition: all .3s;
 }
 
 .comics:hover {
-    background-color: pink;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 30px -10px;
 }
